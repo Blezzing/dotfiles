@@ -1,0 +1,160 @@
+#!/bin/bash
+
+function hc() {
+	/usr/bin/herbstclient "$@"
+}
+
+#load colors for urxvt
+xrdb -merge ~/.Xresources 
+
+# keybinds function Keys
+hc keybind XF86AudioLowerVolume  spawn amixer -D pulse sset Master 5%-
+hc keybind XF86AudioRaiseVolume  spawn amixer -D pulse sset Master 5%+
+hc keybind XF86AudioMute         spawn amixer -D pulse set Master 1+ toggle
+hc keybind XF86MonBrightnessDown spawn light -U 5
+hc keybind XF86MonBrightnessUp   spawn light -A 5
+
+#colors
+foreground=$(xrdb -query | grep '*foreground' | awk '{print $2}')
+foreground=$(xrdb -query | grep '*background' | awk '{print $2}')
+inactive=#111111
+color0=$(xrdb -query | grep '*color0' | awk '{print $2}')
+color1=$(xrdb -query | grep '*color1' | awk '{print $2}')
+color2=$(xrdb -query | grep '*color2' | awk '{print $2}')
+color3=$(xrdb -query | grep '*color3' | awk '{print $2}')
+color4=$(xrdb -query | grep '*color4' | awk '{print $2}')
+color5=$(xrdb -query | grep '*color5' | awk '{print $2}')
+color6=$(xrdb -query | grep '*color6' | awk '{print $2}')
+color7=$(xrdb -query | grep '*color7' | awk '{print $2}')
+color8=$(xrdb -query | grep '*color8' | awk '{print $2}')
+color9=$(xrdb -query | grep '*color9' | awk '{print $2}')
+color10=$(xrdb -query | grep '*color10' | awk '{print $2}')
+color11=$(xrdb -query | grep '*color11' | awk '{print $2}')
+color12=$(xrdb -query | grep '*color12' | awk '{print $2}')
+color13=$(xrdb -query | grep '*color13' | awk '{print $2}')
+color14=$(xrdb -query | grep '*color14' | awk '{print $2}')
+color15=$(xrdb -query | grep '*color15' | awk '{print $2}')
+color16=$(xrdb -query | grep '*color16' | awk '{print $2}')
+color17=$(xrdb -query | grep '*color17' | awk '{print $2}')
+color18=$(xrdb -query | grep '*color18' | awk '{print $2}')
+color19=$(xrdb -query | grep '*color19' | awk '{print $2}')
+color20=$(xrdb -query | grep '*color20' | awk '{print $2}')
+color21=$(xrdb -query | grep '*color21' | awk '{print $2}')
+
+#use super as mod
+Mod=Mod4
+
+#keybinds shortcuts
+hc keybind $Mod-Return spawn urxvt
+hc keybind $Mod-d spawn dmenu_run
+
+#keybinds herbst
+hc keybind $Mod-Control-q quit
+hc keybind $Mod-Control-r reload
+
+#keybinds window
+hc keybind $Mod-q close 
+
+#keybinds for tags
+tag_names=( {1..10} )
+tag_keys=( {1..9} 0 )
+
+hc rename default "${tag_names[0]}" || true
+for i in ${!tag_names[@]} ; do
+    hc add "${tag_names[$i]}"
+    key="${tag_keys[$i]}"
+    if ! [ -z "$key" ] ; then
+        hc keybind "$Mod-$key" use_index "$i"
+        hc keybind "$Mod-Shift-$key" move_index "$i"
+    fi
+done
+
+hc keybind $Mod-Prior use_index -1
+hc keybind $Mod-Next use_index +1
+hc keybind $Mod-Shift-Prior move_index -1
+hc keybind $Mod-Shift-Next move_index +1
+
+#keybinds split and remove frames
+hc keybind $Mod-r remove
+hc keybind $Mod-space cycle_layout
+hc keybind $Mod-u split vertical 0.5
+hc keybind $Mod-o split horizontal 0.5
+hc keybind $Mod-Control-space split explode
+
+#keybinds resize frames
+resizestep=0.05
+hc keybind $Mod-Control-Left  resize left +$resizestep
+hc keybind $Mod-Control-Down  resize down +$resizestep
+hc keybind $Mod-Control-Up    resize up +$resizestep
+hc keybind $Mod-Control-Right resize right +$resizestep
+
+#keybinds presentation toggles
+hc keybind $Mod-s floating toggle
+hc keybind $Mod-f fullscreen toggle
+hc keybind $Mod-p pseudotile toggle
+
+#keybinds mouse
+hc mousebind $Mod-Button1 move
+hc mousebind $Mod-Button2 resize
+hc mousebind $Mod-Button3 zoom
+hc set focus_follows_mouse 1
+
+#keybinds chosing window
+hc keybind $Mod-Left  focus left
+hc keybind $Mod-Down  focus down
+hc keybind $Mod-Up    focus up
+hc keybind $Mod-Right focus right
+
+hc keybind $Mod-Tab   cycle
+
+#keybinds moving windows
+hc keybind $Mod-Shift-Left  shift left
+hc keybind $Mod-Shift-Down  shift down
+hc keybind $Mod-Shift-Up    shift up
+hc keybind $Mod-Shift-Right shift right
+
+hc attr theme.tiling.reset 1
+hc attr theme.floating.reset 1
+
+hc set always_show_frame 1
+hc set frame_border_width 3
+hc set frame_bg_transparent 1
+hc set frame_transparent_width 0
+hc set frame_gap 5
+hc set frame_padding 0
+
+hc set frame_border_active_color  $color8
+hc set frame_border_normal_color  $inactive
+hc set window_border_active_color $color5
+
+hc attr theme.urgent.color            $color3
+hc attr theme.inner_width 0
+hc attr theme.border_width 0
+hc attr theme.floating.border_width 5
+hc attr theme.floating.outer_width 0
+hc attr theme.floating.outer_color    $color0
+hc attr theme.active.color            $color1
+hc attr theme.normal.color            $inactive
+
+hc set window_gap 0
+hc set window_border_width 3
+hc set smart_window_surroundings 1
+hc set smart_frame_surroundings 1
+hc set mouse_recenter_gap 0
+
+#rules for tags
+hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' pseudotile=on
+hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
+hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
+
+#background
+# feh --bg-scale ~/Pictures/wallpaper.jpg &
+hsetroot -solid "#181818"
+
+#start polybar
+~/.config/herbstluftwm/scripts/showbar.sh
+
+#compton
+killall -p compton
+compton -f -D2 --backend glx &
+

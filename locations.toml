@@ -1,0 +1,22 @@
+[herbstluftwm]
+autostart = ['~/.config/herbstluftwm/autostart', 'herbstluftwm/autostart']
+scripts = ['~/.config/herbstluftwm/scripts', 'herbstluftwm/scripts']
+xinitrc = ['~/.xinitrc', 'herbstluftwm/.xinitrc']
+
+[urxvt]
+xresources = ['~/.Xresources', 'urxvt/.Xresources']
+
+[bash]
+bashrc = ['~/.bashrc', 'bash/.bashrc']
+
+[polybar]
+config = ['~/.config/polybar/config', 'polybar/config']
+scripts = ['~/.config/polybar/scripts', 'polybar/scripts']
+
+[git]
+userconfig = ['~/.gitconfig', 'git/.gitconfig']
+
+[dirNotInBackup]
+gedit = ['~/.config/gedit', 'test/gedit']
+
+[dirNotInSystem]
